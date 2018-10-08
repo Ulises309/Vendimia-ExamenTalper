@@ -1,0 +1,149 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="VendimiaModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="Articulo">
+    <Key>
+      <PropertyRef Name="Id_Articulo" />
+    </Key>
+    <Property Name="Id_Articulo" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Descripcion" Type="String" MaxLength="45" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Modelo" Type="String" MaxLength="45" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Precio" Type="Decimal" Precision="12" Scale="2" Nullable="false" />
+    <Property Name="Existencia" Type="Double" Nullable="false" />
+    <Property Name="Activo" Type="Boolean" Nullable="false" />
+    <NavigationProperty Name="VentaDetalle" Relationship="Self.VentaDetalle_Articulo_Id" FromRole="Articulo" ToRole="VentaDetalle" />
+  </EntityType>
+  <EntityType Name="Cliente">
+    <Key>
+      <PropertyRef Name="Id_Cliente" />
+    </Key>
+    <Property Name="Id_Cliente" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Nombre" Type="String" MaxLength="45" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="ApellidoPaterno" Type="String" MaxLength="45" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="ApellidoMaterno" Type="String" MaxLength="45" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="RFC" Type="String" MaxLength="13" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Activo" Type="Boolean" Nullable="false" />
+    <NavigationProperty Name="Venta" Relationship="Self.Venta_Cliente_Id" FromRole="Cliente" ToRole="Venta" />
+  </EntityType>
+  <EntityType Name="Estatus">
+    <Key>
+      <PropertyRef Name="Id_Estatus" />
+    </Key>
+    <Property Name="Id_Estatus" Type="Int32" Nullable="false" />
+    <Property Name="Nombre" Type="String" MaxLength="45" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Activo" Type="Binary" MaxLength="1" FixedLength="true" Nullable="false" />
+    <NavigationProperty Name="Venta" Relationship="Self.Venta_Estatus_Id" FromRole="Estatus" ToRole="Venta" />
+  </EntityType>
+  <EntityType Name="Venta">
+    <Key>
+      <PropertyRef Name="Id_Venta" />
+    </Key>
+    <Property Name="Id_Venta" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Cliente_Id" Type="Int32" />
+    <Property Name="Importe" Type="Decimal" Precision="12" Scale="2" />
+    <Property Name="TasaFinanciamiento" Type="Double" />
+    <Property Name="Plazo" Type="Int32" />
+    <Property Name="Enganche" Type="Double" />
+    <Property Name="MontoEnganche" Type="Decimal" Precision="12" Scale="2" />
+    <Property Name="MontoBonificacion" Type="Decimal" Precision="12" Scale="2" />
+    <Property Name="Mensualidad" Type="Decimal" Precision="12" Scale="2" />
+    <Property Name="Total" Type="Decimal" Precision="12" Scale="2" />
+    <Property Name="Estatus_Id" Type="Int32" Nullable="false" />
+    <Property Name="FechaCreacion" Type="DateTime" Nullable="false" Precision="3" />
+    <NavigationProperty Name="Cliente" Relationship="Self.Venta_Cliente_Id" FromRole="Venta" ToRole="Cliente" />
+    <NavigationProperty Name="Estatus" Relationship="Self.Venta_Estatus_Id" FromRole="Venta" ToRole="Estatus" />
+    <NavigationProperty Name="VentaDetalle" Relationship="Self.VentaDetalle_Venta_Id" FromRole="Venta" ToRole="VentaDetalle" />
+  </EntityType>
+  <EntityType Name="VentaDetalle">
+    <Key>
+      <PropertyRef Name="Id_VentaDetalle" />
+    </Key>
+    <Property Name="Id_VentaDetalle" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Venta_Id" Type="Int32" Nullable="false" />
+    <Property Name="Articulo_Id" Type="Int32" Nullable="false" />
+    <Property Name="Cantidad" Type="Double" Nullable="false" />
+    <NavigationProperty Name="Articulo" Relationship="Self.VentaDetalle_Articulo_Id" FromRole="VentaDetalle" ToRole="Articulo" />
+    <NavigationProperty Name="Venta" Relationship="Self.VentaDetalle_Venta_Id" FromRole="VentaDetalle" ToRole="Venta" />
+  </EntityType>
+  <EntityType Name="Configuracion">
+    <Key>
+      <PropertyRef Name="TasaFinanciamiento" />
+      <PropertyRef Name="Enganche" />
+      <PropertyRef Name="PlazoMaximo" />
+    </Key>
+    <Property Name="TasaFinanciamiento" Type="Double" Nullable="false" />
+    <Property Name="Enganche" Type="Double" Nullable="false" />
+    <Property Name="PlazoMaximo" Type="Int32" Nullable="false" />
+  </EntityType>
+  <Association Name="VentaDetalle_Articulo_Id">
+    <End Role="Articulo" Type="Self.Articulo" Multiplicity="1" />
+    <End Role="VentaDetalle" Type="Self.VentaDetalle" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Articulo">
+        <PropertyRef Name="Id_Articulo" />
+      </Principal>
+      <Dependent Role="VentaDetalle">
+        <PropertyRef Name="Articulo_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="Venta_Cliente_Id">
+    <End Role="Cliente" Type="Self.Cliente" Multiplicity="0..1" />
+    <End Role="Venta" Type="Self.Venta" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Cliente">
+        <PropertyRef Name="Id_Cliente" />
+      </Principal>
+      <Dependent Role="Venta">
+        <PropertyRef Name="Cliente_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="Venta_Estatus_Id">
+    <End Role="Estatus" Type="Self.Estatus" Multiplicity="1" />
+    <End Role="Venta" Type="Self.Venta" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Estatus">
+        <PropertyRef Name="Id_Estatus" />
+      </Principal>
+      <Dependent Role="Venta">
+        <PropertyRef Name="Estatus_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="VentaDetalle_Venta_Id">
+    <End Role="Venta" Type="Self.Venta" Multiplicity="1" />
+    <End Role="VentaDetalle" Type="Self.VentaDetalle" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Venta">
+        <PropertyRef Name="Id_Venta" />
+      </Principal>
+      <Dependent Role="VentaDetalle">
+        <PropertyRef Name="Venta_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="VendimiaEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Articulo" EntityType="Self.Articulo" />
+    <EntitySet Name="Cliente" EntityType="Self.Cliente" />
+    <EntitySet Name="Estatus" EntityType="Self.Estatus" />
+    <EntitySet Name="Venta" EntityType="Self.Venta" />
+    <EntitySet Name="VentaDetalle" EntityType="Self.VentaDetalle" />
+    <EntitySet Name="Configuracion" EntityType="Self.Configuracion" />
+    <AssociationSet Name="VentaDetalle_Articulo_Id" Association="Self.VentaDetalle_Articulo_Id">
+      <End Role="Articulo" EntitySet="Articulo" />
+      <End Role="VentaDetalle" EntitySet="VentaDetalle" />
+    </AssociationSet>
+    <AssociationSet Name="Venta_Cliente_Id" Association="Self.Venta_Cliente_Id">
+      <End Role="Cliente" EntitySet="Cliente" />
+      <End Role="Venta" EntitySet="Venta" />
+    </AssociationSet>
+    <AssociationSet Name="Venta_Estatus_Id" Association="Self.Venta_Estatus_Id">
+      <End Role="Estatus" EntitySet="Estatus" />
+      <End Role="Venta" EntitySet="Venta" />
+    </AssociationSet>
+    <AssociationSet Name="VentaDetalle_Venta_Id" Association="Self.VentaDetalle_Venta_Id">
+      <End Role="Venta" EntitySet="Venta" />
+      <End Role="VentaDetalle" EntitySet="VentaDetalle" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

@@ -1,0 +1,128 @@
+﻿@model Vendimia.Venta
+
+@{
+    ViewBag.Title = "Create";
+}
+
+
+@section Scripts{
+    <script src="~/Scripts/Vistas/Ventas/Create.js"></script>
+    @Scripts.Render("~/bundles/jqueryval")
+}
+
+
+<div class="card">
+    <div class="card-header bg-primary text-white">
+        Registro de ventas
+    </div>
+    <div class="card-body">
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+
+            <div class="col-12 text-right text-success">
+                Folio Venta: @Model.Id_Venta
+                <input type="text" name="venta.Id_Venta" value="@Model.Id_Venta" id="Id_Venta" hidden />
+            </div>
+
+            <div class="form-horizontal">
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+                <div class="form-group" hidden>
+                    @Html.LabelFor(model => model.Cliente_Id, "Cliente_Id", htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        <input type="text" name="venta.Cliente_Id" id="Cliente_Id" value="" />
+                    </div>
+                </div>
+
+
+                <div class="form-group form-inline">
+                    <label for="Cliente" class="control-label col-md-2">Cliente: </label>
+                    <div>
+                        <input type="text" placeholder="Buscar Cliente..." name="Cliente" id="Cliente" list="listaClientes" class="form-control" value="" />
+                        <datalist id="listaClientes"></datalist>
+                        <span class="text-success" id="RFC"></span>
+                        @Html.ValidationMessageFor(model => model.Cliente_Id, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <hr />
+
+                <div class="form-group form-inline">
+                    <label for="Articulo" class="control-label col-md-2">Articulo: </label>
+                    <div class="input-group">
+                        <input type="text" class="form-control" name="Articulo" id="Articulo" list="listaArticulos" placeholder="Buscar Articulo..." aria-label="Buscar Articulo..." aria-describedby="basic-addon2">
+                        <datalist id="listaArticulos"></datalist>
+                        <div class="input-group-append">
+                            <button type="button" class="btn btn-primary" id="add">+</button>
+                        </div>
+                    </div>
+                </div>
+
+                <table id="tablaArticulos" class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Descripción Articulo</th>
+                            <th>Modelo</th>
+                            <th>Cantidad</th>
+                            <th>Precio</th>
+                            <th>Importe</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (VentaDetalle v in Model.VentaDetalle)
+                        {
+                            <tr>
+                                <td>@v.Articulo.Descripcion</td>
+                                <td>@v.Articulo.Modelo</td>
+                                <td><input type="number" name="Cantidad" value="@v.Cantidad" /></td>
+                                <td>@v.Articulo.Precio</td>
+                                <td>@((double)v.Articulo.Precio * @v.Cantidad)</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+
+                <div class="text-right">
+                    <div class="col-m-4">
+                        <div>Enganche: <span id="enganche">0</span></div>
+                        <div>Bonificación Enganche: <span id="bonificacion">0</span></div>
+                        <div>Total: <span id="total">0</span></div>
+                    </div>
+                </div>
+
+                <hr />
+                <div class="mensualidades" hidden>
+                    <table class="table" id="tablaPlazo">
+                        <thead>
+                            <tr>
+                                <th colspan="5" class="text-center bg-primary text-white">ABONOS MENSUALES</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @for (int i = 3; i <= ViewBag.PlazoMaximo; i = i + 3)
+                            {
+                                <tr class="opcionPlazo" plazo="@i">
+                                    <td class="descripcionPlazo">@i ABONOS DE</td>
+                                    <td class="mensualidad"></td>
+                                    <td class="totalPagar"></td>
+                                    <td class="ahorro"></td>
+                                    <td><input type="radio" name="venta.Plazo" value="@i" /></td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="form-group text-right">
+                    <div class="col-md-offset-2 col-md-10">
+                        <a href="~/Ventas/Index" class="cancelar btn btn-danger" role="button" aria-disabled="true">Cancelar</a>
+                        <button class="btn btn-success" type="button" id="siguiente">Siguiente</button>
+                        <input type="submit" value="Guardar" class="btn btn-success" id="enviar" hidden/>
+                    </div>
+                </div>
+            </div>
+
+            
+        }
+    </div>
+</div>

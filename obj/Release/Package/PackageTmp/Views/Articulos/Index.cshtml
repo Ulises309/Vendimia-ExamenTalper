@@ -1,0 +1,51 @@
+﻿@model IEnumerable<Vendimia.Articulo>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Articulos registrados</h2>
+
+<div class="text-right">
+    <a href="~/Articulos/Create" class="btn btn-primary" role="button" aria-disabled="true">Nuevo Articulo</a>
+</div>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Descripcion)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Modelo)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Precio)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Existencia)
+        </th>
+        <th>
+            
+        </th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Descripcion)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Modelo)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Precio)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Existencia)
+        </td>
+        <td>
+            @Html.ActionLink("Editar", "Edit", new { id = item.Id_Articulo })
+        </td>
+    </tr>
+}
+
+</table>

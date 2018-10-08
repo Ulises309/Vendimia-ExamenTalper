@@ -1,0 +1,36 @@
+﻿@model Vendimia.Venta
+@using Vendimia.Models
+
+@{
+    ViewBag.Title = "Seleccionar Plazo";
+    decimal precioContado = Math.Round(Calculadora.PrecioContado((decimal)Model.Total), 2);
+}
+
+<form action="~/Ventas/SeleccionarPlazo" method="post">
+
+    <input type="text" name="Id_Venta" value="@Model.Id_Venta" hidden/>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th colspan="5" class="text-center bg-primary text-white">ABONOS MENSUALES</th>
+            </tr>
+        </thead>
+        <tbody>
+            @for (int i = 3; i <= ViewBag.PlazoMaximo; i = i + 3)
+            {
+                <tr>
+                    <td>@i ABONOS DE</td>
+                    <td>$@Math.Round((Calculadora.Total(precioContado, i) / i), 2)</td>
+                    <td>TOTAL A PAGAR $@Math.Round(Calculadora.Total(precioContado, i), 2)</td>
+                    <td>SE AHORRA $@Math.Round(((decimal)Model.Total - Calculadora.Total(precioContado, i)), 2)</td>
+                    <td><input type="radio" name="Plazo" value="3" /></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <div class="text-right">
+        <a href="~/Ventas/Index" class="cancelar btn btn-danger" role="button" aria-disabled="true">Cancelar</a> <input type="submit" value="Finalizar venta" class="btn btn-success" />
+    </div>
+    
+</form>

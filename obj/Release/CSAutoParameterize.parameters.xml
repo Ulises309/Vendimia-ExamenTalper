@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<parameters>
+  <parameter name="BD-Web.config Connection String" description="BD Cadena de conexión que usa la aplicación en web.config para obtener acceso a la base de datos." defaultValue="Data Source=LAPTOP-AIFTNRET\SQLEXPRESS;Initial Catalog=Vendimia;Integrated Security=True;" tags="SqlConnectionString">
+    <parameterEntry kind="XmlFile" scope="C:\\Users\\Ulises\\source\\repos\\Vendimia\\Vendimia\\obj\\Release\\Package\\PackageTmp\\Web\.config$" match="/configuration/connectionStrings/add[@name='BD']/@connectionString" />
+  </parameter>
+  <parameter name="VendimiaEntities-Web.config Connection String" description="VendimiaEntities Cadena de conexión que usa la aplicación en web.config para obtener acceso a la base de datos." defaultValue="metadata=res://*/DB.csdl|res://*/DB.ssdl|res://*/DB.msl;provider=System.Data.SqlClient;provider connection string=&quot;data source=LAPTOP-AIFTNRET\SQLEXPRESS;initial catalog=Vendimia;integrated security=True;MultipleActiveResultSets=True;App=EntityFramework&quot;" tags="SqlConnectionString">
+    <parameterEntry kind="XmlFile" scope="C:\\Users\\Ulises\\source\\repos\\Vendimia\\Vendimia\\obj\\Release\\Package\\PackageTmp\\Web\.config$" match="/configuration/connectionStrings/add[@name='VendimiaEntities']/@connectionString" />
+  </parameter>
+</parameters>

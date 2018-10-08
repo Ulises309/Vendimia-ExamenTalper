@@ -1,0 +1,55 @@
+﻿@model IEnumerable<Vendimia.Venta>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Ventas activas</h2>
+
+<div class="text-right">
+    <a href="~/Ventas/Create" class="btn btn-primary" role="button" aria-disabled="true">Nueva Venta</a>
+</div>
+<table class="table mt-3">
+    <tr>
+        <th>
+            Folio Venta
+        </th>
+        <th>
+            Clave Cliente
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Cliente.Nombre)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Total)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Estatus.Nombre)
+        </th>
+        <th>Fecha</th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Id_Venta)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Cliente_Id)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Cliente.Nombre) @Html.DisplayFor(modelItem => item.Cliente.ApellidoPaterno) @Html.DisplayFor(modelItem => item.Cliente.ApellidoMaterno)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Total)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Estatus.Nombre)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.FechaCreacion)
+        </td>
+    </tr>
+}
+
+</table>

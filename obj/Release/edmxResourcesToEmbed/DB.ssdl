@@ -1,0 +1,149 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="VendimiaModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="Articulo">
+    <Key>
+      <PropertyRef Name="Id_Articulo" />
+    </Key>
+    <Property Name="Id_Articulo" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Descripcion" Type="varchar" MaxLength="45" Nullable="false" />
+    <Property Name="Modelo" Type="varchar" MaxLength="45" Nullable="false" />
+    <Property Name="Precio" Type="decimal" Precision="12" Scale="2" Nullable="false" />
+    <Property Name="Existencia" Type="float" Nullable="false" />
+    <Property Name="Activo" Type="bit" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Cliente">
+    <Key>
+      <PropertyRef Name="Id_Cliente" />
+    </Key>
+    <Property Name="Id_Cliente" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Nombre" Type="varchar" MaxLength="45" Nullable="false" />
+    <Property Name="ApellidoPaterno" Type="varchar" MaxLength="45" Nullable="false" />
+    <Property Name="ApellidoMaterno" Type="varchar" MaxLength="45" Nullable="false" />
+    <Property Name="RFC" Type="varchar" MaxLength="13" Nullable="false" />
+    <Property Name="Activo" Type="bit" Nullable="false" />
+  </EntityType>
+  <!--Errores durante la generación:
+advertencia 6002: La tabla o vista 'Vendimia.dbo.Configuracion' no tiene definida ninguna clave principal. Se ha inferido la clave y la definición se creado como una vista o tabla de solo lectura.-->
+  <EntityType Name="Configuracion">
+    <Key>
+      <PropertyRef Name="TasaFinanciamiento" />
+      <PropertyRef Name="Enganche" />
+      <PropertyRef Name="PlazoMaximo" />
+    </Key>
+    <Property Name="TasaFinanciamiento" Type="float" Nullable="false" />
+    <Property Name="Enganche" Type="float" Nullable="false" />
+    <Property Name="PlazoMaximo" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Estatus">
+    <Key>
+      <PropertyRef Name="Id_Estatus" />
+    </Key>
+    <Property Name="Id_Estatus" Type="int" Nullable="false" />
+    <Property Name="Nombre" Type="varchar" MaxLength="45" Nullable="false" />
+    <Property Name="Activo" Type="binary" MaxLength="1" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Venta">
+    <Key>
+      <PropertyRef Name="Id_Venta" />
+    </Key>
+    <Property Name="Id_Venta" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Cliente_Id" Type="int" />
+    <Property Name="Importe" Type="decimal" Precision="12" Scale="2" />
+    <Property Name="TasaFinanciamiento" Type="float" />
+    <Property Name="Plazo" Type="int" />
+    <Property Name="Enganche" Type="float" />
+    <Property Name="MontoEnganche" Type="decimal" Precision="12" Scale="2" />
+    <Property Name="MontoBonificacion" Type="decimal" Precision="12" Scale="2" />
+    <Property Name="Mensualidad" Type="decimal" Precision="12" Scale="2" />
+    <Property Name="Total" Type="decimal" Precision="12" Scale="2" />
+    <Property Name="Estatus_Id" Type="int" Nullable="false" />
+    <Property Name="FechaCreacion" Type="datetime" Nullable="false" />
+  </EntityType>
+  <EntityType Name="VentaDetalle">
+    <Key>
+      <PropertyRef Name="Id_VentaDetalle" />
+    </Key>
+    <Property Name="Id_VentaDetalle" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Venta_Id" Type="int" Nullable="false" />
+    <Property Name="Articulo_Id" Type="int" Nullable="false" />
+    <Property Name="Cantidad" Type="float" Nullable="false" />
+  </EntityType>
+  <Association Name="Venta_Cliente_Id">
+    <End Role="Cliente" Type="Self.Cliente" Multiplicity="0..1" />
+    <End Role="Venta" Type="Self.Venta" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Cliente">
+        <PropertyRef Name="Id_Cliente" />
+      </Principal>
+      <Dependent Role="Venta">
+        <PropertyRef Name="Cliente_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="Venta_Estatus_Id">
+    <End Role="Estatus" Type="Self.Estatus" Multiplicity="1" />
+    <End Role="Venta" Type="Self.Venta" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Estatus">
+        <PropertyRef Name="Id_Estatus" />
+      </Principal>
+      <Dependent Role="Venta">
+        <PropertyRef Name="Estatus_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="VentaDetalle_Articulo_Id">
+    <End Role="Articulo" Type="Self.Articulo" Multiplicity="1" />
+    <End Role="VentaDetalle" Type="Self.VentaDetalle" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Articulo">
+        <PropertyRef Name="Id_Articulo" />
+      </Principal>
+      <Dependent Role="VentaDetalle">
+        <PropertyRef Name="Articulo_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="VentaDetalle_Venta_Id">
+    <End Role="Venta" Type="Self.Venta" Multiplicity="1" />
+    <End Role="VentaDetalle" Type="Self.VentaDetalle" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Venta">
+        <PropertyRef Name="Id_Venta" />
+      </Principal>
+      <Dependent Role="VentaDetalle">
+        <PropertyRef Name="Venta_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="VendimiaModelStoreContainer">
+    <EntitySet Name="Articulo" EntityType="Self.Articulo" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Cliente" EntityType="Self.Cliente" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Estatus" EntityType="Self.Estatus" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Venta" EntityType="Self.Venta" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="VentaDetalle" EntityType="Self.VentaDetalle" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Configuracion" EntityType="Self.Configuracion" store:Type="Tables" store:Schema="dbo">
+      <DefiningQuery>SELECT 
+    [Configuracion].[TasaFinanciamiento] AS [TasaFinanciamiento], 
+    [Configuracion].[Enganche] AS [Enganche], 
+    [Configuracion].[PlazoMaximo] AS [PlazoMaximo]
+    FROM [dbo].[Configuracion] AS [Configuracion]</DefiningQuery>
+    </EntitySet>
+    <AssociationSet Name="Venta_Cliente_Id" Association="Self.Venta_Cliente_Id">
+      <End Role="Cliente" EntitySet="Cliente" />
+      <End Role="Venta" EntitySet="Venta" />
+    </AssociationSet>
+    <AssociationSet Name="Venta_Estatus_Id" Association="Self.Venta_Estatus_Id">
+      <End Role="Estatus" EntitySet="Estatus" />
+      <End Role="Venta" EntitySet="Venta" />
+    </AssociationSet>
+    <AssociationSet Name="VentaDetalle_Articulo_Id" Association="Self.VentaDetalle_Articulo_Id">
+      <End Role="Articulo" EntitySet="Articulo" />
+      <End Role="VentaDetalle" EntitySet="VentaDetalle" />
+    </AssociationSet>
+    <AssociationSet Name="VentaDetalle_Venta_Id" Association="Self.VentaDetalle_Venta_Id">
+      <End Role="Venta" EntitySet="Venta" />
+      <End Role="VentaDetalle" EntitySet="VentaDetalle" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

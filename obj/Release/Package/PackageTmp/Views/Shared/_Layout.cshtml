@@ -1,0 +1,66 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - Vendimia</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse justify-content-between" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle text-white" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Inicio
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="~/Ventas">Ventas</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="~/Clientes">Clientes</a>
+                        <a class="dropdown-item" href="~/Articulos">Articulos</a>
+                        <a class="dropdown-item" href="~/Configuraciones/Edit">Configuración</a>
+                    </div>
+                </li>
+            </ul>
+            <span class="navbar-text navbar-nav text-white">
+                <strong>Fecha: @DateTime.Now.ToString("dd/MM/yyyy")</strong>
+            </span>
+        </div>
+    </nav>
+    <div class="container body-content">
+        @if (ViewBag.Exito != null)
+        {
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                <strong>Bien hecho. </strong> @ViewBag.Exito
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        }
+        @if (ViewBag.Error != null)
+        {
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <strong>Error. </strong> @ViewBag.Error
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        }
+        @RenderBody()
+        <hr />
+        <footer>
+            <p>&copy; @DateTime.Now.Year - Vendimia</p>
+        </footer>
+    </div>
+    @Scripts.Render("~/bundles/jquery")
+    <script src="~/Scripts/config.js"></script>
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("scripts", required: false)
+</body>
+</html>
